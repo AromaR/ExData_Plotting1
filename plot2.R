@@ -1,0 +1,17 @@
+df<-read.table("household_power_consumption.txt", header=FALSE, sep=";")
+d<-df[df$V1=="1/2/2007" | df$V1=="2/2/2007",]
+d$V1<-as.Date(d$V1,"%d/%m/%Y")
+d$V1<-format(d$V1,"%y %m %d")
+head(d)
+d$V2<-strptime(d$V2,format = "%H:%M:%S")
+d$V2<-format(d$V2,format = "%H:%M:%S")
+head(d)
+require(scales) 
+require(ggplot2)
+d$V3<-as.numeric(as.matrix(d$V3))
+d$newdate<-paste(d$V1, d$V2)
+d$newdate<-strptime(d$newdate,"%y %m %d %H:%M:%S")
+ggplot(d, aes(newdate, V3)) + geom_line() + xlab("") + ylab("Global Active Power (in kilowatts)") 
+
+dev.copy(png,'plot2.png')
+dev.off()
